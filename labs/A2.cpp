@@ -197,16 +197,25 @@ int main(int argc, char* argv[])
         start = std::chrono::steady_clock::now();
         p = dotKji(m1, m2, mSide, 5);
         end = std::chrono::steady_clock::now();
-        std::cout<<"k-i-j: "<<std::chrono::duration_cast<std::chrono::microseconds>(end - start).count()<< "µs"<<std::endl;
+        std::cout<<"k-j-i: "<<std::chrono::duration_cast<std::chrono::microseconds>(end - start).count()<< "µs"<<std::endl;
 
         std::cout<<std::endl<<"Testing different numbers of threads on classic i-j-k loop order"<<std::endl;
 
-        for (int i = 1; i <= 10; ++i)
+
+        start = std::chrono::steady_clock::now();
+        p = dotIjk(m1, m2, mSide, 1);
+        end = std::chrono::steady_clock::now();
+        double t1 = (double)std::chrono::duration_cast<std::chrono::microseconds>(end-start).count();
+        std::cout<<"1 threads: "<<(long)t1<<std::endl;
+
+        for (int i = 2; i <= 10; ++i)
         {
             start = std::chrono::steady_clock::now();
             p = dotIjk(m1, m2, mSide, i);
             end = std::chrono::steady_clock::now();
-            std::cout<<i<<" threads: "<<std::chrono::duration_cast<std::chrono::microseconds>(end - start).count()<< "µs"<<std::endl;
+            double t = t1 / (double)std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+            std::cout<<i<<" threads: "<<std::chrono::duration_cast<std::chrono::microseconds>(end - start).count()
+                << "µs, Efficiency: "<<t<<std::endl;
         }
     }
 
